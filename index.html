@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Holesky Block Height</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <h1>Holesky Block Height</h1>
+  <button id="getBlock">Get Current Block Number</button>
+  <p id="blockNumber">Block Number: N/A</p>
+
+  <script>
+    const getBlockBtn = document.getElementById('getBlock');
+    const blockDisplay = document.getElementById('blockNumber');
+
+    async function getHoleskyBlockNumber() {
+      try {
+        // Request access to the user's MetaMask wallet
+        if (!window.ethereum) {
+          alert("Please install MetaMask to use this feature.");
+          return;
+        }
+
+        // Connect to MetaMask
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+        // Create a provider using ethers.js and MetaMask
+        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        // Check if the user is connected to Holesky (chainId: 0x4268 = 17000)
+        const { chainId } = await provider.getNetwork();
+        if (chainId !== 17000) {
+          alert("Please switch your MetaMask network to Holesky testnet.");
+          return;
+        }
+
+        // Get block number
+        const blockNumber = await provider.getBlockNumber();
+        blockDisplay.textContent = `Block Number: ${blockNumber}`;
+      } catch (err) {
+        console.error(err);
+        blockDisplay.textContent = "Error fetching block number.";
+      }
+    }
+
+    getBlockBtn.addEventListener('click', getHoleskyBlockNumber);
+  </script>
+</body>
+</html>
