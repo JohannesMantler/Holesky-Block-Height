@@ -31,10 +31,13 @@
 
         // Check if the user is connected to Holesky (chainId: 0x4268 = 17000)
         const { chainId } = await provider.getNetwork();
+          console.log("Detected Chain ID:", chainId.toString()); // helpful debug line
+
           if (chainId.toString() !== '17000') {
             alert("Please switch your MetaMask network to Holesky testnet.");
             return;
           }
+
 
         // Get block number
         const blockNumber = await provider.getBlockNumber();
